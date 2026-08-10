@@ -18,11 +18,6 @@ class QuizGame:
         self.quizzes.append(quiz)   # 퀴즈 추가
     
     def run(self):
-        print("=== 롤 챔피언 퀴즈 게임 ===")
-        for quiz in self.quizzes:
-            print(quiz.question)    # 문제 출력
-
-    def run(self):
         print("=== 롤 챔피언 퀴즈 게임 ===\n")
         score = 0  # 점수를 저장하는 변수, 처음엔 0점
         
