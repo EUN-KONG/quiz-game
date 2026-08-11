@@ -1,3 +1,6 @@
+import json
+import os
+
 class Quiz:
     """퀴즈 정보를 저장하는 클래스"""
     def __init__(self, question, choices, answer):
@@ -9,15 +12,31 @@ class Quiz:
         """사용자 답이 정답인지 확인"""
         return self.answer == user_answer  # 정답 확인    
 
+    # Quiz 객체를 딕셔너리로 변환 (JSON 저장용)
+    def to_dict(self):
+        return {
+            "question": self.question,
+            "choices": self.choices,
+            "answer": self.answer
+        }
+
+    # 딕셔너리에서 Quiz 객체로 변환 (JSON 로드용)
+    @staticmethod
+    def from_dict(data):
+        return Quiz(data["question"], data["choices"], data["answer"])
+
 class QuizGame:
     """퀴즈 게임을 관리하는 클래스"""
     def __init__(self):
         self.score = 0          # 누적 점수
         self.quizzes = []       # 퀴즈 목록 (Quiz 객체들)
-    
+        self.state_file = "state.json"  # 저장 파일명
+        self.load_state()        # 프로그램 시작 시 저장된 데이터 불러오기
+        
     def add_quiz(self, quiz):
         """퀴즈 목록에 새로운 퀴즈 추가"""
         self.quizzes.append(quiz)   # 퀴즈를 리스트에 추가
+        self.save_state()  # 퀴즈 추가 후 즉시 저장
 
     def show_quiz_list(self):
         """등록된 퀴즈 목록 출력"""
@@ -58,6 +77,7 @@ class QuizGame:
                 self.show_score()  # 점수 확인
             elif choice == "5":
                 print("\n게임을 종료합니다! 👋")
+                self.save_state()  # 종료 전 데이터 저장
                 break  # 무한 루프 탈출
             else:
                 print("❌ 1, 2, 3, 4, 5 중에 입력해주세요!")
@@ -135,41 +155,72 @@ class QuizGame:
         
         # 모든 문제가 끝나면 최종 점수 출력
         self.score += score  # 누적 점수에 이번 게임 점수 더하기
+        self.save_state()  # 게임 종료 후 점수 저장
         print("="*40)
         print(f"🏆 최종 점수: {score}/{len(self.quizzes)}")
         print("="*40 + "\n")
 
+    # ✨ JSON 파일에 데이터 저장
+    def save_state(self):
+        """현재 상태(퀴즈, 점수)를 state.json에 저장"""
+        state = {
+            "score": self.score,
+            "quizzes": [quiz.to_dict() for quiz in self.quizzes]
+        }
+        
+        try:
+            with open(self.state_file, "w", encoding="utf-8") as f:
+                json.dump(state, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            print(f"❌ 저장 실패: {e}")
+
+    # ✨ JSON 파일에서 데이터 불러오기
+    def load_state(self):
+        """state.json에서 저장된 상태를 불러오기"""
+        try:
+            # 파일이 존재하는지 확인
+            if os.path.exists(self.state_file):
+                with open(self.state_file, "r", encoding="utf-8") as f:
+                    state = json.load(f)
+                
+                # 저장된 점수와 퀴즈 복원
+                self.score = state.get("score", 0)
+                self.quizzes = [Quiz.from_dict(q) for q in state.get("quizzes", [])]
+        except Exception as e:
+            print(f"❌ 로드 실패: {e}")
+            
 # 프로그램 시작 지점
 if __name__ == "__main__":
     # QuizGame 객체 생성
     game = QuizGame()
 
-    # 기본 퀴즈 데이터 추가
-    game.add_quiz(Quiz(
-        "정글러가 갱킹을 안 오는 이유는?",
-        ["바쁘다", "못 봤다", "캠핑 중이다", "위의 모든 것"],
-        4  # 정답: 4번
-    ))
-    game.add_quiz(Quiz(
-        "티모를 보면 적이 제일 먼저 하는 행동은?",
-        ["싸운다", "도망간다", "버섯 밟는다", "친구 신청한다"],
-        3  # 정답: 3번
-    ))
-    game.add_quiz(Quiz(
-        "야스오가 게임마다 지는 진짜 이유는?",
-        ["바람이 없어서", "팀원 탓", "인터넷이 느려서", "철학적 고민 중이라서"],
-        2  # 정답: 2번
-    ))
-    game.add_quiz(Quiz(
-        "다음 중 암살자 챔피언은?",
-        ["소나", "질리언", "샤코", "소라카"],
-        3  # 정답: 3번
-    ))
-    game.add_quiz(Quiz(
-        "럭스가 스킬을 쓸 때 항상 외치는 것은?",
-        ["어둠이여!", "빛이여!", "제발 맞아라!", "궁 빗나가지 마라!"],
-        2  # 정답: 2번
-    ))
+    # 기본 퀴즈 데이터 추가 (처음 한 번만 추가됨)
+    if len(game.quizzes) == 0:
+        game.add_quiz(Quiz(
+            "정글러가 갱킹을 안 오는 이유는?",
+            ["바쁘다", "못 봤다", "캠핑 중이다", "위의 모든 것"],
+            4  # 정답: 4번
+        ))
+        game.add_quiz(Quiz(
+            "티모를 보면 적이 제일 먼저 하는 행동은?",
+            ["싸운다", "도망간다", "버섯 밟는다", "친구 신청한다"],
+            3  # 정답: 3번
+        ))
+        game.add_quiz(Quiz(
+            "야스오가 게임마다 지는 진짜 이유는?",
+            ["바람이 없어서", "팀원 탓", "인터넷이 느려서", "철학적 고민 중이라서"],
+            2  # 정답: 2번
+        ))
+        game.add_quiz(Quiz(
+            "다음 중 암살자 챔피언은?",
+            ["소나", "질리언", "샤코", "소라카"],
+            3  # 정답: 3번
+        ))
+        game.add_quiz(Quiz(
+            "럭스가 스킬을 쓸 때 항상 외치는 것은?",
+            ["어둠이여!", "빛이여!", "제발 맞아라!", "궁 빗나가지 마라!"],
+            2  # 정답: 2번
+        ))
 
     # 메뉴 실행 (게임 시작)
     game.show_menu()
