@@ -28,10 +28,12 @@ class Quiz:
 class QuizGame:
     """퀴즈 게임을 관리하는 클래스"""
     def __init__(self):
-        self.score = 0          # 누적 점수
+        self.score = 0          # 최고 점수 (처음에는 0점)
         self.quizzes = []       # 퀴즈 목록 (Quiz 객체들)
         self.state_file = "state.json"  # 저장 파일명
-        self.load_state()        # 프로그램 시작 시 저장된 데이터 불러오기
+
+        # 프로그램 시작할 때 state.json에 저장된 최고 점수와 퀴즈를 불러옴
+        self.load_state()
         
     def add_quiz(self, quiz):
         """퀴즈 목록에 새로운 퀴즈 추가"""
@@ -192,9 +194,17 @@ class QuizGame:
             print("✅ 데이터가 저장되었습니다.")
 
     def show_score(self):
-        """현재까지의 누적 점수 표시"""
+        """현재 최고 점수를 표시"""
+
         print("\n=== 점수 확인 ===")
-        print(f"현재 점수: {self.score}점")
+
+        # 아직 퀴즈를 한 번도 풀지 않은 경우
+        if self.score == 0:
+            print("아직 퀴즈를 푼 기록이 없습니다.")
+        else:
+            # 퀴즈를 풀었다면 현재 최고 점수 표시
+            print(f"최고 점수: {self.score}점")
+
         print()
 
     def run(self): 
@@ -232,12 +242,23 @@ class QuizGame:
                 else: 
                     print(f"❌ 오답입니다! 정답은 {quiz.answer}번이에요.\n") 
                     
-            # 모든 문제가 끝나면 최종 점수 출력 
-            self.score += score # 누적 점수에 이번 게임 점수 더하기 
-            self.save_state() # 게임 종료 후 점수 저장 
-            print("="*40) 
-            print(f"🏆 최종 점수: {score}/{len(self.quizzes)}") 
-            print("="*40 + "\n") 
+            # 모든 문제가 끝나면 이번 게임 점수와 최고 점수 비교
+            if score > self.score:
+                # 이번 게임 점수가 기존 최고 점수보다 높으면 최고 점수 갱신
+                self.score = score
+                print(f"🎉 최고 점수가 갱신되었습니다! 현재 최고 점수: {self.score}점")
+            else:
+                # 기존 최고 점수가 더 높으면 그대로 유지
+                print(f"🏆 현재 최고 점수: {self.score}점")
+
+            # 최고 점수를 파일에 저장
+            self.save_state()
+
+            # 이번 게임에서 얻은 점수 출력
+            print("="*40)
+            print(f"🏆 이번 게임 점수: {score}/{len(self.quizzes)}")
+            print(f"🏆 최고 점수: {self.score}/{len(self.quizzes)}")
+            print("="*40 + "\n")
             
         except KeyboardInterrupt: 
             # Ctrl+C 입력 처리 
