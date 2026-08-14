@@ -300,6 +300,7 @@ class QuizGame:
                 print("✅ 이전 데이터가 로드되었습니다.")
             else:
                 print("📝 새로운 게임을 시작합니다.")
+                self.initialize_default_quizzes()
             
         except json.JSONDecodeError:
             # JSON 파일이 손상된 경우
