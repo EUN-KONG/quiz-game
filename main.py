@@ -160,6 +160,7 @@ class QuizGame:
             
             # 2단계: 선택지 4개 입력받기
             choices = []
+            
             for i in range(4):
                 while True:
                     choice = input(f"선택지 {i+1}을 입력하세요: ").strip()
@@ -173,26 +174,7 @@ class QuizGame:
                     break
             
             # 3단계: 정답 번호 입력받기 (1~4 범위 확인)
-            while True:
-                try:
-                    answer = input("정답 번호(1~4)를 입력하세요: ").strip()
-                    
-                    # 빈 입력 확인
-                    if not answer:
-                        print("❌ 정답 번호를 입력해주세요!")
-                        continue
-                    
-                    # 숫자 변환
-                    answer_num = int(answer)
-
-                    # 1~4 범위 확인
-                    if 1 <= answer_num <= 4:
-                        break
-                    else:
-                        print("❌ 1~4 사이의 숫자를 입력하세요!")
-                except ValueError:
-                    # 숫자가 아닌 값이 입력되었을 때
-                    print("❌ 숫자를 입력하세요!")
+            answer_num = self.get_valid_answer_input()
             
             # 4단계: 입력받은 정보로 Quiz 객체 생성 후 추가
             self.add_quiz(Quiz(question, choices, answer_num))
@@ -312,37 +294,37 @@ class QuizGame:
             self.quizzes = []
             self.initialize_default_quizzes()
             
-        def initialize_default_quizzes(self):
-            """기본 퀴즈 5개를 초기화하는 메서드 (파일 손상 시 복구용)"""
+    def initialize_default_quizzes(self):
+        """기본 퀴즈 5개를 초기화하는 메서드 (파일 손상 시 복구용)"""
         
-            self.quizzes = [
-                Quiz(
-                    "정글러가 갱킹을 안 오는 이유는?",
-                    ["바쁘다", "못 봤다", "캠핑 중이다", "위의 모든 것"],
-                    4
-                ),
-                Quiz(
-                    "티모를 보면 적이 제일 먼저 하는 행동은?",
-                    ["싸운다", "도망간다", "버섯 밟는다", "친구 신청한다"],
-                    3
-                ),
-                Quiz(
-                    "야스오가 게임마다 지는 진짜 이유는?",
-                    ["바람이 없어서", "팀원 탓", "인터넷이 느려서", "철학적 고민 중이라서"],
-                    2
-                ),
-                Quiz(
-                    "다음 중 암살자 챔피언은?",
-                    ["소나", "질리언", "샤코", "소라카"],
-                    3
-                ),
-                Quiz(
-                    "럭스가 스킬을 쓸 때 항상 외치는 것은?",
-                    ["빛이여!", "어둠이여!", "제발 맞아라!", "궁 빗나가지 마라!"],
-                    1
-                )
-            ]
-            print("✅ 기본 퀴즈 5개가 로드되었습니다.")
+        self.quizzes = [
+            Quiz(
+                "정글러가 갱킹을 안 오는 이유는?",                   
+                ["바쁘다", "못 봤다", "캠핑 중이다", "위의 모든 것"],
+                4
+            ),
+            Quiz(
+                "티모를 보면 적이 제일 먼저 하는 행동은?",
+                ["싸운다", "도망간다", "버섯 밟는다", "친구 신청한다"],
+                3
+            ),
+            Quiz(
+                "야스오가 게임마다 지는 진짜 이유는?",
+                ["바람이 없어서", "팀원 탓", "인터넷이 느려서", "철학적 고민 중이라서"],
+                2
+            ),
+            Quiz(
+                "다음 중 암살자 챔피언은?",
+                ["소나", "질리언", "샤코", "소라카"],
+                3
+            ),
+            Quiz(
+                "럭스가 스킬을 쓸 때 항상 외치는 것은?",
+                ["빛이여!", "어둠이여!", "제발 맞아라!", "궁 빗나가지 마라!"],
+                1
+            )
+        ]
+        print("✅ 기본 퀴즈 5개가 로드되었습니다.")
 
 
 if __name__ == "__main__":
