@@ -95,6 +95,14 @@ python main.py
 ```
 quiz-game/
 │
+├── images/
+│   ├── development-environment.png
+│   ├── main.png
+│   ├── add-quiz.png
+│   ├── quiz-list.png
+│   ├── play-quiz.png
+│   └── game-result.png
+│
 ├── main.py                 # 게임 실행 진입점
 ├── quiz.py                 # Quiz 클래스 정의
 ├── quiz_game.py            # QuizGame 클래스 정의
@@ -210,3 +218,9 @@ JSON 파일이 손상된 경우 기본 퀴즈 5개로 복구합니다.
 
 ### 점수 확인
 ![alt text](images/game-result.png)
+
+---
+
+## 📜 Git 커밋 이력
+
+![alt text](image-1.png)
