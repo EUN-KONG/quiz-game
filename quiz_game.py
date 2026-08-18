@@ -220,11 +220,22 @@ class QuizGame:
                 else:
                     print(f"❌ 오답입니다! 정답은 {quiz.answer}번이에요.\n")
             
-            # 모든 문제가 끝나면 최종 점수 출력
-            self.score += score  # 누적 점수에 이번 게임 점수 더하기
-            self.save_state()  # 게임 종료 후 점수 저장
+            # 모든 문제가 끝나면 이번 게임 점수와 최고 점수 비교
+            if score > self.score:
+                # 이번 게임 점수가 기존 최고 점수보다 높으면 최고 점수 갱신
+                self.score = score
+                print(f"🎉 최고 점수가 갱신되었습니다! 현재 최고 점수: {self.score}점")
+            else:
+                # 기존 최고 점수가 더 높으면 그대로 유지
+                print(f"🏆 현재 최고 점수: {self.score}점")
+
+            # 최고 점수를 파일에 저장
+            self.save_state()
+
+            # 이번 게임에서 얻은 점수 출력
             print("="*40)
-            print(f"🏆 최종 점수: {score}/{len(self.quizzes)}")
+            print(f"🏆 이번 게임 점수: {score}/{len(self.quizzes)}")
+            print(f"🏆 최고 점수: {self.score}/{len(self.quizzes)}")
             print("="*40 + "\n")
             
         except KeyboardInterrupt:
