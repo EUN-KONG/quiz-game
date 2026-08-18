@@ -1,5 +1,16 @@
 # 🎮 퀴즈 게임 (Quiz Game)
 
+## 🔗 GitHub 저장소
+
+GitHub Repository: https://github.com/EUN-KONG/quiz-game
+
+---
+
+### 🛠️ 개발 환경 설정
+
+![alt text](images/development-environment.png)
+---
+
 ## 📋 프로젝트 개요
 
 **퀴즈 게임**은 사용자가 저장된 퀴즈를 풀고 점수를 얻는 대화형 CLI 게임입니다.
@@ -180,3 +191,22 @@ JSON 파일이 손상된 경우 기본 퀴즈 5개로 복구합니다.
 게임 종료 시 state.json에 데이터를 저장합니다.
 최고 점수가 갱신되면 변경된 데이터를 저장합니다.
 파일은 UTF-8 인코딩으로 읽고 저장합니다.
+
+---
+
+## 📸 실행 화면
+
+### 메인 메뉴
+![alt text](images/main.png.png)
+
+### 퀴즈 풀기
+![alt text](images/play-quiz.png)
+
+### 퀴즈 추가
+![alt text](images/add-quiz.png)
+
+### 퀴즈 목록
+![alt text](images/quiz-list.png)
+
+### 점수 확인
+![alt text](images/game-result.png)
