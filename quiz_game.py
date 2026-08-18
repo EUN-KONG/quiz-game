@@ -75,7 +75,7 @@ class QuizGame:
 
                 # 사용자 선택에 따라 다른 기능 실행
                 if choice == 1:
-                    print("퀴즈 풀기 기능을 준비 중입니다.")
+                    self.run()  # 게임 시작
                 elif choice == 2:
                     self.add_new_quiz()  # 새 퀴즈 추가
                 elif choice == 3:
@@ -185,7 +185,58 @@ class QuizGame:
 
         print()
 
+    def run(self):
+        """게임 실행 - 모든 퀴즈를 풀고 점수 계산"""
+        try:
+            # 퀴즈가 없으면 게임 시작 불가
+            if not self.quizzes:
+                print("\n❌ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가해주세요!\n")
+                return
 
+            # 게임 시작 메시지
+            print("\n" + "="*40)
+            print("    🎮 롤 챔피언 퀴즈 게임 시작!")
+            print("="*40 + "\n")
+            
+            score = 0  # 이번 게임의 점수 (0부터 시작)
+            
+            # 모든 퀴즈를 순서대로 출제
+            # enumerate: 인덱스(i)와 퀴즈(quiz)를 동시에 가져옴
+            for i, quiz in enumerate(self.quizzes):
+                # 문제 출력 (Q1, Q2, ... 형식)
+                print(f"Q{i+1}. {quiz.question}")
+                
+                # 보기 목록 출력 (1번부터 시작하려고 j+1 사용)
+                for j, choice in enumerate(quiz.choices):
+                    print(f"  {j+1}. {choice}")
+                
+                # 사용자에게 정답 번호 입력받기 (검증된 입력)
+                answer = self.get_valid_answer_input()
+                
+                # 입력값과 정답 비교
+                if answer == quiz.answer:
+                    print("✅ 정답입니다!\n")
+                    score += 1  # 정답이면 점수 1 증가
+                else:
+                    print(f"❌ 오답입니다! 정답은 {quiz.answer}번이에요.\n")
+            
+            # 모든 문제가 끝나면 최종 점수 출력
+            self.score += score  # 누적 점수에 이번 게임 점수 더하기
+            self.save_state()  # 게임 종료 후 점수 저장
+            print("="*40)
+            print(f"🏆 최종 점수: {score}/{len(self.quizzes)}")
+            print("="*40 + "\n")
+            
+        except KeyboardInterrupt:
+            # Ctrl+C 입력 처리
+            print("\n\n⚠️  게임이 중단되었습니다.")
+            self.save_state()
+            print("✅ 데이터가 저장되었습니다.")
+        except EOFError:
+            # 입력 스트림 종료 처리
+            print("\n\n⚠️  입력 스트림이 종료되었습니다.")
+            self.save_state()
+            print("✅ 데이터가 저장되었습니다.")
             
     # ✨ JSON 파일에 데이터 저장
     def save_state(self):
