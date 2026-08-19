@@ -8,8 +8,7 @@ GitHub Repository: https://github.com/EUN-KONG/quiz-game
 
 ### 🛠️ 개발 환경 설정
 
-![alt text](images/development-environment.png)
----
+## ![alt text](images/development-environment.png)
 
 ## 📋 프로젝트 개요
 
@@ -205,22 +204,39 @@ JSON 파일이 손상된 경우 기본 퀴즈 5개로 복구합니다.
 ## 📸 실행 화면
 
 ### 메인 메뉴
+
 ![alt text](images/main.png.png)
 
 ### 퀴즈 풀기
+
 ![alt text](images/play-quiz.png)
 
 ### 퀴즈 추가
+
 ![alt text](images/add-quiz.png)
 
 ### 퀴즈 목록
+
 ![alt text](images/quiz-list.png)
 
 ### 점수 확인
+
 ![alt text](images/game-result.png)
 
 ---
 
 ## 📜 Git 커밋 이력
 
-![alt text](image-1.png)
+![alr text] (images/git-log.png)
+
+--
+
+## 🔄 Git 실습 수행 흔적
+
+### Git Clone
+
+![alr text] (images/git-clone.png)
+
+### Git Pull 실습
+
+![alr text] (images/git-pull.png)
